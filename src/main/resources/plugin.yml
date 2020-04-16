@@ -1,0 +1,6 @@
+name: McSEmeGUI
+version: ${project.version}
+main: com.github.ptom76.mcsemegui.Mcsemegui
+load: STARTUP
+authors: [pitan_mad]
+description: Minecraft server Emerald Graphical User Interface

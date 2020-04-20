@@ -1,5 +1,5 @@
 name: McSEmeGUI
-version: 1.0.1
+version: 1.0.2
 main: com.github.ptom76.mcsemegui.Mcsemegui
 load: STARTUP
 authors: [pitan_mad]

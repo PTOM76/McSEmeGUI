@@ -15,6 +15,7 @@ public class Mcsemegui extends JavaPlugin implements Listener
 {
     ServerManagerGUI gui;
     public static File pluginsFolder;
+    MainCommandSave scc = new MainCommandSave();
     @Override
     public void onEnable()
     {
@@ -24,6 +25,7 @@ public class Mcsemegui extends JavaPlugin implements Listener
         Bukkit.getPluginManager().registerEvents(this, this);
         if (!getDataFolder().exists()) getDataFolder().mkdir();
         pluginsFolder = getDataFolder();
+        scc.loadMarkCommands();
     }
     @Override
     public void onDisable()

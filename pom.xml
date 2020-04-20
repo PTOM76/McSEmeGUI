@@ -6,7 +6,7 @@
 
     <groupId>com.github.ptom76</groupId>
     <artifactId>McSEmeGUI</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>Mcsemegui</name>

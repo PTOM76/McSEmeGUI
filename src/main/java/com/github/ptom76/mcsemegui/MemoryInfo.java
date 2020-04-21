@@ -3,6 +3,7 @@ import java.text.DecimalFormat;
 //名前がメモリ情報だけど本当はステータス
 public class MemoryInfo {
     public static long プレイヤー数;
+    private static LoadLanguage Langs;
 
     public static String getMemoryInfo() {
         String info = null;
@@ -12,16 +13,16 @@ public class MemoryInfo {
         long total = Runtime.getRuntime().totalMemory() / 1000000;
         long used = total - free;
         double ratio = (used * 100 / (double) total);
-        info = "  合計メモリ:" + format_mem.format(total);
+        info = Langs.lang.totalMemory+":" + format_mem.format(total);
         info += System.lineSeparator();
-        info += "  空きメモリ:" + format_mem.format(free);
+        info += Langs.lang.emptyMemory+":" + format_mem.format(free);
         info += System.lineSeparator();
-        info += "  使用メモリ:" + format_mem.format(used);
+        info += Langs.lang.usedMemory+":" + format_mem.format(used);
         return info;
     }
     public static void viewMemoryInfo()
     {
-        String textAreaData = "ステータス" + System.lineSeparator() + getMemoryInfo() + System.lineSeparator() + "  プレイヤー数:" + プレイヤー数;
+        String textAreaData = Langs.lang.status + System.lineSeparator() + getMemoryInfo() + System.lineSeparator() + Langs.lang.numberOfPlayers+":" + プレイヤー数 + Langs.lang.people;
         ServerManagerGUI.textArea1.setText(textAreaData);
     }
 }

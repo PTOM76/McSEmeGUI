@@ -13,18 +13,21 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static org.bukkit.Bukkit.getLogger;
 
-public class ServerManagerGUI extends JFrame implements ActionListener, MouseListener
-{
-    SaveCommand scc = new SaveCommand();
+
+public class ServerManagerGUI extends JFrame implements ActionListener, MouseListener {
+    private static MainCommandSave scc = new MainCommandSave();
+    private static LoadLanguage Langs;
     private JTabbedPane mainLogPanel;//コンソールのタブ付きパネル
     private static JScrollPane ChatPanel; //チャットパネル表示
     private static JScrollPane CommandPanel; //コマンドパネル表示
     private static JScrollPane McSEmeGUIPanel; //GUIのログパネル表示
-    private JMenuBar mb1;
-    private JMenu me1;
-    private JMenuItem mi1;
-    private JMenu helpmenu1;
+    private static JScrollPane MarkCommandPanel;
+    private JMenuBar mb1;//メニューバー
+    private JMenu me1;//メニュー
+    private JMenuItem mi1;//メニューアイテム
+    private JMenu helpmenu1;//
     private JMenu settingMenu;
     private JMenu memoryInfoUpdateSpeed;
     private JMenuItem memoryInfoUpdateStop;
@@ -43,7 +46,6 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     private static JScrollPane scrollPane1;
     private static JScrollPane scrollPane2;
     private JList list2;
-    private JLabel label1;
     private JLabel label2;
     private JLabel label3;
     public static JTextArea textArea1;
@@ -51,30 +53,35 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     private static DefaultListModel modelChat = new DefaultListModel<>();
     private static DefaultListModel modelCommand = new DefaultListModel<>();
     private static DefaultListModel modelMcSEmeGUI = new DefaultListModel<>();
+    public static DefaultListModel modelMarkCommand = new DefaultListModel<>();
     private DefaultListModel model2 = new DefaultListModel<>();
     private JSplitPane splitPane1;
     private JSplitPane splitPane2;
     private JPopupMenu popup;
+    //private JPopupMenu markCommandListPopupMenu;
     private JMenuItem pmCopy;
     private JMenuItem pmPaste;
     private JMenuItem pmCut;
     private JMenuItem pmAllSelect;
     private JMenuItem pmCommandMark;
+    //private JMenuItem mclpmDelete;
+    //private JMenuItem mclpmEdit;
     private String memoryInfoString[] = new String[0];
     private static JList listChat = new JList();
     private static JList listCommand = new JList();
     private static JList listMcSEmeGUI = new JList();
+    public static JList listMarkCommand = new JList();
     private static JScrollBar scrollBar;
     public ServerManagerGUI() {
+        getLogger().info("Language:" + Langs.lang.language);
         Container cp1 = getContentPane();
         this.pack();
         this.setTheme();
-        //String jarPath = System.getProperty("java.class.path");
-        //String dirPath = jarPath.substring(0, jarPath.lastIndexOf(File.separator)+1);
-        String cp=System.getProperty("java.class.path");
-        String fs=System.getProperty("file.separator");
-        String acp=(new File(cp)).getAbsolutePath();
-        this.setTitle(acp + " - " + "McS Eme GUI");
+
+        String cp = System.getProperty("java.class.path");
+        String fs = System.getProperty("file.separator");
+        String acp = (new File(cp)).getAbsolutePath();
+        this.setTitle(acp + " - " + "McSEmeGUI");
         this.setResizable(true);
         this.setSize(900, 500);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -84,20 +91,18 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         this.setIconImage(icon.getImage());
         mainLogPanel = new JTabbedPane();
         popup = new JPopupMenu();
+        //markCommandListPopupMenu = new JPopupMenu();
         panel1 = new JPanel();
         panel2 = new JPanel();
         panel3 = new JPanel();
         panel4 = new JPanel();
-
         panel1.setLayout(new BorderLayout());
         panel2.setLayout(new BorderLayout());
         panel3.setLayout(new BorderLayout());
         panel4.setLayout(new BorderLayout());
-        enterButton = new JButton("決定(Enter)");
-        label1 = new JLabel("コンソール");
-        label2 = new JLabel("プレイヤー");
-        label3 = new JLabel("ステータス");
-        label1.setHorizontalAlignment(JLabel.CENTER);
+        enterButton = new JButton(Langs.lang.decision);
+        label2 = new JLabel(Langs.lang.player);
+        label3 = new JLabel(Langs.lang.status);
         label2.setHorizontalAlignment(JLabel.CENTER);
         label3.setHorizontalAlignment(JLabel.CENTER);
         textField1 = new JTextField(0);
@@ -109,14 +114,14 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         listChat = new JList();
         listCommand = new JList();
         listMcSEmeGUI = new JList();
+        listMarkCommand = new JList();
         scrollPane1 = new JScrollPane(list1);
         scrollPane2 = new JScrollPane(list2);
         ChatPanel = new JScrollPane(listChat);
         CommandPanel = new JScrollPane(listCommand);
         McSEmeGUIPanel = new JScrollPane(listMcSEmeGUI);
-        panel1.add(label1, BorderLayout.NORTH);
+        MarkCommandPanel = new JScrollPane(listMarkCommand);
         panel1.add(mainLogPanel, BorderLayout.CENTER);//panel1はコンソール
-       // AllPanel.add(scrollPane1, BorderLayout.CENTER);
         panel1.add(panel3, BorderLayout.SOUTH);
         panel2.add(label2, BorderLayout.NORTH);
         splitPane1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel1, panel2);
@@ -126,28 +131,25 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         panel3.add(enterButton, BorderLayout.EAST);
         panel4.add(label3, BorderLayout.NORTH);
         panel4.add(textArea1, BorderLayout.CENTER);//パネル4にtextを入れる
-
-        mainLogPanel.addTab("コンソール",null, scrollPane1,"全体のログ");
-        mainLogPanel.addTab("チャット",null, ChatPanel,"チャットログ");
-        mainLogPanel.addTab("コマンド",null, CommandPanel,"プレイヤーの入力したコマンドのログ");
+        mainLogPanel.addTab(Langs.lang.console,null, scrollPane1,"全体のログ");
+        mainLogPanel.addTab(Langs.lang.chat,null, ChatPanel,"チャットログ");
+        mainLogPanel.addTab(Langs.lang.command,null, CommandPanel,"プレイヤーの入力したコマンドのログ");
         mainLogPanel.addTab("McSEmeGUI",null, McSEmeGUIPanel,"このプラグインのログ");
-
+        mainLogPanel.addTab(Langs.lang.markCommand,null, MarkCommandPanel,"plugin/McSEmeGUI/save_commands.json");
         cp1.add(splitPane1, BorderLayout.CENTER);
-
-
         mb1 = new JMenuBar();
-        me1 = new JMenu("ファイル");
-        settingMenu = new JMenu("設定");
-        helpmenu1 = new JMenu("ヘルプ");
-        mi1 = new JMenuItem("閉じる");
-        help1 = new JMenuItem("プラグイン情報");
-        help2 = new JMenuItem("ヘルプ");
-        memoryInfoUpdateSpeed = new JMenu("ステータスの更新頻度(メモリ)");
-        memoryInfoUpdateStop = new JMenuItem("ストップ(0)");
-        memoryInfoUpdateLowSpeed = new JMenuItem("ロースピード(1)");
-        memoryInfoUpdateNormalSpeed = new JMenuItem("ノーマルスピード(2)");
-        memoryInfoUpdateHighSpeed = new JMenuItem("ハイスピード(3)");
-        memoryInfoUpdateMaxSpeed = new JMenuItem("マックススピード(4)");
+        me1 = new JMenu(Langs.lang.file);
+        settingMenu = new JMenu(Langs.lang.setting);
+        helpmenu1 = new JMenu(Langs.lang.help);
+        mi1 = new JMenuItem(Langs.lang.close);
+        help1 = new JMenuItem(Langs.lang.pluginsInformation);
+        help2 = new JMenuItem(Langs.lang.help);
+        memoryInfoUpdateSpeed = new JMenu(Langs.lang.statusUpdateFrequency);
+        memoryInfoUpdateStop = new JMenuItem(Langs.lang.stop+"(0)");
+        memoryInfoUpdateLowSpeed = new JMenuItem(Langs.lang.lowSpeed+"(1)");
+        memoryInfoUpdateNormalSpeed = new JMenuItem(Langs.lang.normalSpeed+"(2)");
+        memoryInfoUpdateHighSpeed = new JMenuItem(Langs.lang.highSpeed+"(3)");
+        memoryInfoUpdateMaxSpeed = new JMenuItem(Langs.lang.maxSpeed+"(4)");
         mb1.add(me1);
         mb1.add(settingMenu);
         mb1.add(helpmenu1);
@@ -167,8 +169,8 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         mi1.addActionListener(this);
         help1.addActionListener(this);
         help2.addActionListener(this);
-        pmCopy = new JMenuItem("コピー Ctrl+C");pmPaste = new JMenuItem("ペースト Ctrl+V");pmCut = new JMenuItem("カット Ctrl+X");pmAllSelect = new JMenuItem("すべて選択 Ctrl+A");
-        pmCommandMark = new JMenuItem("コマンドお気に入り登録 Ctrl+B");
+        pmCopy = new JMenuItem(Langs.lang.copy+" Ctrl+C");pmPaste = new JMenuItem(Langs.lang.paste+" Ctrl+V");pmCut = new JMenuItem(Langs.lang.cut+" Ctrl+X");pmAllSelect = new JMenuItem(Langs.lang.allSelect+" Ctrl+A");
+        pmCommandMark = new JMenuItem(Langs.lang.commandMarkCommandSave+" Ctrl+B");
         popup.add(pmCommandMark);
         popup.addSeparator();
         popup.add(pmCut);popup.add(pmCopy);popup.add(pmPaste);popup.add(pmAllSelect);
@@ -189,8 +191,18 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         TextUndoManager ud = new TextUndoManager();
         textField1.getDocument().addUndoableEditListener(ud);
         textField1.addKeyListener(ud);
-        addToConsole("Minecraft Server Emerald GUIが有効になりました!", "gui");
-
+        listMarkCommand.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                JList listMarkCommand = (JList)evt.getSource();
+                if (evt.getClickCount() == 2) {
+                    int index = listMarkCommand.locationToIndex(evt.getPoint());
+                    textField1.setText((String)listMarkCommand.getModel().getElementAt(listMarkCommand.locationToIndex(evt.getPoint())));
+                } else if (evt.getClickCount() == 3) {
+                    int index = listMarkCommand.locationToIndex(evt.getPoint());
+                }
+            }
+        });
+        addToConsole(Langs.lang.enabled, "gui");
         try {
             MemoryInfoEveryCheck.main(memoryInfoString);
         } catch (ParseException e) {
@@ -279,7 +291,7 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         }
         if (e1.getSource() == mi1)
         {
-            int ans = JOptionPane.showConfirmDialog(ServerManagerGUI.this, "本当にこのサーバーを閉じますか？)");
+            int ans = JOptionPane.showConfirmDialog(ServerManagerGUI.this, Langs.lang.closeMessage);
             if(ans == JOptionPane.YES_OPTION)
             {
                 ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -291,8 +303,8 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
             Container cp2 = getContentPane();
             JOptionPane.showMessageDialog(
                     cp2.getParent(),
-                    "<html>McSEmeGUI Plugin<br><br>Version 1.0.1<br><br>McSEmeGUIはMinecraftServer用のコンソールGUI<br>を表示するSpigotプラグインです。<br><br>byKao(Pitan 音MAD)</html>",
-                    "プラグイン情報",
+                    "<html>McSEmeGUI Plugin<br><br>Version 1.0.3<br><br>McSEmeGUIはMinecraftServer用のコンソールGUI<br>を表示するSpigotプラグインです。<br><br>byKao(Pitan 音MAD)</html>",
+                    Langs.lang.pluginsInformation,
                     JOptionPane.PLAIN_MESSAGE,
                     null);
         }
@@ -301,8 +313,8 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
             Container cp2 = getContentPane();
             JOptionPane.showMessageDialog(
                     cp2.getParent(),
-                    "<html>Wiki:<a href= \"https://github.com/PTOM76/McSEmeGUI/wiki\" >https://github.com/PTOM76/McSEmeGUI/wiki</a></html>",
-                    "ヘルプ",
+                    "<html>Wiki:<a href= \"https://github.com/PTOM76/McSEmeGUI/wiki\" >https://github.com/PTOM76/McSEmeGUI/wiki</a><br>\"使い方.txt\"はjarの中に入ってます、</html>",
+                    Langs.lang.help,
                     JOptionPane.PLAIN_MESSAGE,
                     null);
             cp2.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -335,14 +347,14 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         }
         if (e1.getSource() == pmCommandMark)
         {
-            scc.main();
+            scc.saveMarkCommands();
         }
     }
     class WindowClosing extends WindowAdapter
     {
         public void windowClosing(WindowEvent e)
         {
-            int ans = JOptionPane.showConfirmDialog(ServerManagerGUI.this, "本当にサーバーを閉じますか？)");
+            int ans = JOptionPane.showConfirmDialog(ServerManagerGUI.this, Langs.lang.closeMessage);
             if(ans == JOptionPane.YES_OPTION)
             {
                 ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -365,26 +377,26 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat dt = new SimpleDateFormat("HH:mm:ss");
-        model.addElement("[" + dt.format(cal.getTime()) + " 情報]:" +  text1);
+        model.addElement("[" + dt.format(cal.getTime()) + " "+Langs.lang.info+ "]:" +  text1);
         list1.setModel(model);
         scrollBar = scrollPane1.getVerticalScrollBar();
         scrollBar.setValue(scrollBar.getMaximum());
 
         if (modelType == "chat") {
-            modelChat.addElement("[" + dt.format(cal.getTime()) + " 情報]:" + text1);
+            modelChat.addElement("[" + dt.format(cal.getTime()) + " "+Langs.lang.info+ "]:" + text1);
             listChat.setModel(modelChat);
             scrollBar = ChatPanel.getVerticalScrollBar();
             scrollBar.setValue(scrollBar.getMaximum());
 
         }
         if (modelType == "command") {
-            modelCommand.addElement("[" + dt.format(cal.getTime()) + " 情報]:" + text1);
+            modelCommand.addElement("[" + dt.format(cal.getTime()) + " "+Langs.lang.info+ "]:" + text1);
             listCommand.setModel(modelCommand);
             scrollBar = CommandPanel.getVerticalScrollBar();
             scrollBar.setValue(scrollBar.getMaximum());
         }
         if (modelType == "gui") {
-            modelMcSEmeGUI.addElement("[" + dt.format(cal.getTime()) + " 情報]:" + text1);
+            modelMcSEmeGUI.addElement("[" + dt.format(cal.getTime()) + " "+Langs.lang.info+ "]:" + text1);
             listMcSEmeGUI.setModel(modelMcSEmeGUI);
             scrollBar = McSEmeGUIPanel.getVerticalScrollBar();
             scrollBar.setValue(scrollBar.getMaximum());
@@ -399,5 +411,10 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     {
         model2.removeElement(pls);
         list2.setModel(model2);
+    }
+    public static void addCommandMark(String acm)
+    {
+        modelMarkCommand.addElement(acm);
+        listMarkCommand.setModel(modelMarkCommand);
     }
 }

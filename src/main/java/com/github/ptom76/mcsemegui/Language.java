@@ -8,6 +8,9 @@ public class Language {
     @SerializedName("language")
     @Expose
     public String language;
+    @SerializedName("language_word")
+    @Expose
+    public String language_word;
     @SerializedName("decision")
     @Expose
     public String decision;
@@ -125,5 +128,10 @@ public class Language {
     @SerializedName("saveCommandError2")
     @Expose
     public String saveCommandError2;
-
+    @SerializedName("pluginVersionCheck")
+    @Expose
+    public String pluginVersionCheck;
+    @SerializedName("guiCloseOnly")
+    @Expose
+    public String guiCloseOnly;
 }

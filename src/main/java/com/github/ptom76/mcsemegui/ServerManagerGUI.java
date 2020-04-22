@@ -30,6 +30,7 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     private JMenu helpmenu1;//
     private JMenu settingMenu;
     private JMenu memoryInfoUpdateSpeed;
+    private JMenuItem languageSettingMenu;
     private JMenuItem memoryInfoUpdateStop;
     private JMenuItem memoryInfoUpdateLowSpeed;
     private JMenuItem memoryInfoUpdateNormalSpeed;
@@ -45,7 +46,7 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     public static JTextField textField1;
     private static JScrollPane scrollPane1;
     private static JScrollPane scrollPane2;
-    private JList list2;
+    private static JList list2;
     private JLabel label2;
     private JLabel label3;
     public static JTextArea textArea1;
@@ -54,18 +55,17 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
     private static DefaultListModel modelCommand = new DefaultListModel<>();
     private static DefaultListModel modelMcSEmeGUI = new DefaultListModel<>();
     public static DefaultListModel modelMarkCommand = new DefaultListModel<>();
-    private DefaultListModel model2 = new DefaultListModel<>();
+    private static DefaultListModel model2 = new DefaultListModel<>();
     private JSplitPane splitPane1;
     private JSplitPane splitPane2;
     private JPopupMenu popup;
-    //private JPopupMenu markCommandListPopupMenu;
     private JMenuItem pmCopy;
     private JMenuItem pmPaste;
     private JMenuItem pmCut;
     private JMenuItem pmAllSelect;
     private JMenuItem pmCommandMark;
-    //private JMenuItem mclpmDelete;
-    //private JMenuItem mclpmEdit;
+    private JMenuItem guiCloseOnly;
+
     private String memoryInfoString[] = new String[0];
     private static JList listChat = new JList();
     private static JList listCommand = new JList();
@@ -139,9 +139,12 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         cp1.add(splitPane1, BorderLayout.CENTER);
         mb1 = new JMenuBar();
         me1 = new JMenu(Langs.lang.file);
+
         settingMenu = new JMenu(Langs.lang.setting);
         helpmenu1 = new JMenu(Langs.lang.help);
         mi1 = new JMenuItem(Langs.lang.close);
+        guiCloseOnly = new JMenuItem(Langs.lang.guiCloseOnly);
+        languageSettingMenu = new JMenuItem(Langs.lang.language_word + Langs.lang.setting + "Language setting");
         help1 = new JMenuItem(Langs.lang.pluginsInformation);
         help2 = new JMenuItem(Langs.lang.help);
         memoryInfoUpdateSpeed = new JMenu(Langs.lang.statusUpdateFrequency);
@@ -154,7 +157,9 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         mb1.add(settingMenu);
         mb1.add(helpmenu1);
         me1.add(mi1);
+        me1.add(guiCloseOnly);
         settingMenu.add(memoryInfoUpdateSpeed);
+        settingMenu.add(languageSettingMenu);
         memoryInfoUpdateSpeed.add(memoryInfoUpdateStop);
         memoryInfoUpdateSpeed.add(memoryInfoUpdateLowSpeed);
         memoryInfoUpdateSpeed.add(memoryInfoUpdateNormalSpeed);
@@ -176,6 +181,7 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
         popup.add(pmCut);popup.add(pmCopy);popup.add(pmPaste);popup.add(pmAllSelect);
         ImageIcon star = new ImageIcon(cl.getResource("star.png"));
         pmCommandMark.setIcon(star);
+        languageSettingMenu.addActionListener(this);
         memoryInfoUpdateStop.addActionListener(this);
         memoryInfoUpdateLowSpeed.addActionListener(this);
         memoryInfoUpdateNormalSpeed.addActionListener(this);
@@ -240,6 +246,17 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
 
     public void actionPerformed(ActionEvent e1)
     {
+        if (e1.getSource() == guiCloseOnly)
+        {
+            this.setVisible(false);
+            getLogger().info("Only McSEme GUI is closed. You can display it again after reloading.");
+        }
+        if (e1.getSource() == languageSettingMenu)
+        {
+            InitialConfig.languageChange = 1;
+            String[] t = new String[0];
+            InitialConfig.main(t);
+        }
         if ((e1.getSource() == enterButton) || (e1.getSource() == textField1))
         {
             String console_command = textField1.getText();
@@ -303,7 +320,7 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
             Container cp2 = getContentPane();
             JOptionPane.showMessageDialog(
                     cp2.getParent(),
-                    "<html>McSEmeGUI Plugin<br><br>Version 1.0.3<br><br>McSEmeGUIはMinecraftServer用のコンソールGUI<br>を表示するSpigotプラグインです。<br><br>byKao(Pitan 音MAD)</html>",
+                    "<html>McSEmeGUI Plugin<br><br>Version 1.0.6<br><br>" + Langs.lang.pluginVersionCheck + "<br><br>byKao(Pitan 音MAD)</html>",
                     Langs.lang.pluginsInformation,
                     JOptionPane.PLAIN_MESSAGE,
                     null);
@@ -402,15 +419,20 @@ public class ServerManagerGUI extends JFrame implements ActionListener, MouseLis
             scrollBar.setValue(scrollBar.getMaximum());
         }
     }
-    public void addPlayersList(String pls)
+    public static void addPlayersList(String pls)
     {
         model2.addElement(pls);
         list2.setModel(model2);
+        MemoryInfo.プレイヤー数++;
+        MemoryInfo.viewMemoryInfo();
     }
-    public void removePlayersList(String pls)
+    public static void removePlayersList(String pls)
     {
         model2.removeElement(pls);
         list2.setModel(model2);
+        MemoryInfo.プレイヤー数--;
+        MemoryInfo.viewMemoryInfo();
+
     }
     public static void addCommandMark(String acm)
     {

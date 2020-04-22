@@ -1,40 +1,43 @@
 package com.github.ptom76.mcsemegui;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
 import static com.github.ptom76.mcsemegui.Mcsemegui.config;
-import static com.github.ptom76.mcsemegui.Mcsemegui.loadLanguage;
+import static org.bukkit.Bukkit.getLogger;
 
 public class InitialConfig extends JFrame implements ActionListener{
     protected Container pane;
+    private static LoadLanguage loadLanguage = new LoadLanguage();
     String[] languages = {"English","日本語","한국어","中文"};
     JComboBox languageSettingBox;
     JButton okButton;
+    public static int languageChange = 0;
     private static ConfigSave configSave = new ConfigSave();
-
     public static String language = null;
     public static void main(String[] args){
-        if(config.contains("language")==true) {
+        if((config.contains("language")==true)&&(languageChange == 0)) {
             loadLanguage.languageOption = config.getString("language");
             LoadLanguage loadLanguage = new LoadLanguage();
             loadLanguage.main();
             return;
         }
-
         InitialConfig frame = new InitialConfig("Language Setting");
-        frame.setTheme();
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
     }
     InitialConfig(String t){
         super(t);
+        ClassLoader cl = this.getClass().getClassLoader();
+        ImageIcon icon = new ImageIcon(cl.getResource("icon.png"));
+        this.setIconImage(icon.getImage());
+        this.setTheme();
         this.setSize(275, 175);
         pane = getContentPane();
         JPanel panel = new JPanel();
@@ -86,8 +89,15 @@ public class InitialConfig extends JFrame implements ActionListener{
             if (selectLanguage == "中文"){language = "ch_cn.json";}
             LoadLanguage loadLanguage = new LoadLanguage();
             loadLanguage.languageOption = language;
-            loadLanguage.main();
             configSave.ConfigSave();
+            if (languageChange == 1) {
+                getLogger().info("Server is reloading...");
+                this.setVisible(false);
+                ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+                Bukkit.dispatchCommand(console, "reload");
+            }
+            this.setVisible(false);
+            loadLanguage.main();
         }
     }
 }

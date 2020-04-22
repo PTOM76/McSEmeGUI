@@ -10,7 +10,7 @@ public class LoadLanguage {
     private static StringBuilder jsonBuilder2 = new StringBuilder();
     private static String json2;
     public static String languageOption = new String();
-
+    public static Gson gson = new Gson();
     public void main() {
 
         InputStream in = getClass().getResourceAsStream("/lang/" + languageOption);
@@ -22,7 +22,6 @@ public class LoadLanguage {
                     jsonBuilder2.append(string);
                 }
                 json2 = jsonBuilder2.toString();
-                Gson gson = new Gson();
                 lang = gson.fromJson(json2, Language.class);
             } catch (IOException e) {
                 getLogger().info("failed to read language file.");
@@ -35,10 +34,6 @@ public class LoadLanguage {
                     }
                 }
             }
-
-            //} catch (URISyntaxException use) {
-            //none
-            //}
         }catch (UnsupportedEncodingException unsupportedEncodingException){
             //none
         }
@@ -47,40 +42,3 @@ public class LoadLanguage {
         scc.loadMarkCommands();
     }
 }
-            // ServerManagerGUI.addToConsole("failed to read language file.", "gui");
-
-
-    /*
-    public void loadMarkCommands() {
-        BufferedReader bufferedReader = null;
-        try {
-            bufferedReader = new BufferedReader(new FileReader(McsemeguiFolder));
-            String string;
-            while ((string = bufferedReader.readLine()) != null) {
-                jsonBuilder.append(string);
-            }
-            json = jsonBuilder.toString();
-            Gson gson = new Gson();
-            Language = gson.fromJson(json, SaveCommand.class);
-            for (int i = 0; i < Language.commands.size(); i++)
-            {
-                modelMarkCommand.addElement(Language.commands.get(i).command);
-            }
-            listMarkCommand.setModel(modelMarkCommand);
-        } catch (IOException e) {
-            ServerManagerGUI.addToConsole("コマンドの読込に失敗しました。", "gui");
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception ex) {
-                    ServerManagerGUI.addToConsole("コマンドのファイルを閉じることに失敗しました。", "gui");
-                }
-            }
-        }
-    }
-     */
-
-
-
-

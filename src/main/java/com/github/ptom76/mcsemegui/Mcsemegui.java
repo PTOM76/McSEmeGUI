@@ -14,11 +14,10 @@ import java.io.File;
 
 public class Mcsemegui extends JavaPlugin implements Listener
 {
-    //public static FileConfiguration config;
     public static LoadLanguage loadLanguage = new LoadLanguage();
     public static File pluginsFolder;
     public static FileConfiguration config = null;
-    ServerManagerGUI gui;
+    public static ServerManagerGUI gui;
     private static LoadLanguage Langs;
     @Override
     public void onEnable()
@@ -53,18 +52,15 @@ public class Mcsemegui extends JavaPlugin implements Listener
     @EventHandler
     public void onJoin(PlayerJoinEvent event)
     {
-        gui.addToConsole(event.getPlayer().getName() + Langs.lang.serverJoin, "chat");
         gui.addPlayersList(event.getPlayer().getName());
-        MemoryInfo.プレイヤー数++;
-        MemoryInfo.viewMemoryInfo();
+        gui.addToConsole(event.getPlayer().getName() + Langs.lang.serverJoin, "chat");
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event)
     {
-        gui.addToConsole(event.getPlayer().getName() + Langs.lang.serverLeave, "chat");
         gui.removePlayersList(event.getPlayer().getName());
-        MemoryInfo.プレイヤー数--;
-        MemoryInfo.viewMemoryInfo();
+        gui.addToConsole(event.getPlayer().getName() + Langs.lang.serverLeave, "chat");
+
     }
 }

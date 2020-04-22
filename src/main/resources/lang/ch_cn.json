@@ -1,5 +1,6 @@
 {
   "language": "中文",
+  "language_word": "语言",
   "decision": "输入(Enter)",
   "player": "播放器",
   "status": "状态",
@@ -38,5 +39,7 @@
   "isSaved": "已标记(保存)",
   "isSavedCommand": "命令已保存。",
   "saveCommandError1": "无法保存命令。您没有写权限。",
-  "saveCommandError2": "无法保存命令。"
+  "saveCommandError2": "无法保存命令。",
+  "pluginVersionCheck": "McSEmeGUI是一个Spigot插件，显示<br>Minecraft Server的控制台GUI。",
+  "guiCloseOnly": "仅关闭McSEmeGUI"
 }

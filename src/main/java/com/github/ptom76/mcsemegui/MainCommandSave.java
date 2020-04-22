@@ -2,12 +2,9 @@ package com.github.ptom76.mcsemegui;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import javax.swing.*;
 
 import static com.github.ptom76.mcsemegui.Mcsemegui.pluginsFolder;
 import static com.github.ptom76.mcsemegui.ServerManagerGUI.*;

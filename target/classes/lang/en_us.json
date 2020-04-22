@@ -1,5 +1,6 @@
 {
   "language": "English",
+  "language_word": "Language",
   "decision": "Decision(Enter)",
   "player": "Players",
   "status": "Status",
@@ -13,7 +14,7 @@
   "close": "Close",
   "pluginsInformation": "Plugin Information",
   "statusUpdateFrequency": "Status update frequency(memory)",
-  "stop": "stop",
+  "stop": "Stop",
   "lowSpeed": "Low speed",
   "normalSpeed": "Normal speed",
   "highSpeed": "High speed",
@@ -35,8 +36,10 @@
   "usedMemory": "   usedMemory",
   "loadCommandError1": "Failed to read command.",
   "loadCommandError2": "Failed to close command file.",
-  "isSaved": "Is marked(saved).",
+  "isSaved": "is marked(saved).",
   "isSavedCommand": "Saved commands.",
   "saveCommandError1": "Failed to save command.(Do not have write permission.)",
-  "saveCommandError2": "Failed to save command."
+  "saveCommandError2": "Failed to save command.",
+  "pluginVersionCheck": "McSEmeGUI is a Spigot plugin that displays<br> a console GUI for Minecraft Server.",
+  "guiCloseOnly": "Close McSEmeGUI only"
 }

@@ -1,5 +1,6 @@
 {
   "language": "한국어",
+  "language_word": "언어",
   "decision": "결정(Enter)",
   "player": "선수",
   "status": "상태",
@@ -18,9 +19,9 @@
   "normalSpeed": "정상 속도",
   "highSpeed": "고속",
   "maxSpeed": "최고 속도",
-  "copy": "본",
-  "paste": "풀",
-  "cut": "절단",
+  "copy": "복사",
+  "paste": "붙여넣기",
+  "cut": "잘라",
   "allSelect": "모든 선택",
   "commandMark_commandSave": "마크 명령(저장 명령)",
   "enabled": "Minecraft Server Emerald GUI 사용 가능했습니다!",
@@ -38,5 +39,7 @@
   "isSaved": "표시 (저장)됩니다.",
   "isSavedCommand": "저장된 명령.",
   "saveCommandError1": "명령을 저장하지 못했습니다 (쓰기 권한이 없습니다).",
-  "saveCommandError2": "명령을 저장하지 못했습니다."
+  "saveCommandError2": "명령을 저장하지 못했습니다.",
+  "pluginVersionCheck": "McSEmeGUI 는 MinecraftServer 용 콘솔<br> GUI를 표시 Spigot 플러그인입니다.",
+  "guiCloseOnly": "McSEmeGUI 만 닫기"
 }

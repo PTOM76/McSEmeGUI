@@ -1,5 +1,6 @@
 {
   "language": "日本語",
+  "language_word": "言語",
   "decision": "決定(Enter)",
   "player": "プレイヤー",
   "status": "ステータス",
@@ -38,5 +39,7 @@
   "isSaved": "をマーク(保存)しました。",
   "isSavedCommand": "コマンドを保存しました。",
   "saveCommandError1": "コマンドの保存に失敗しました。(書き込み権限がありません。)",
-  "saveCommandError2": "コマンドの保存に失敗しました。"
+  "saveCommandError2": "コマンドの保存に失敗しました。",
+  "pluginVersionCheck": "McSEmeGUIは、MinecraftServer用のコンソールGUI<br>を表示するSpigotプラグインです。",
+  "guiCloseOnly": "McSEmeGUIのみ閉じる"
 }
